@@ -1,0 +1,47 @@
+name: PHP CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: employee_management
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mysqli
+          coverage: none
+
+      - name: Validate PHP files
+        run: find . -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Start PHP server
+        run: |
+          php -S 127.0.0.1:8080 -t . > /dev/null 2>&1 &
+          sleep 5
+
+      - name: Test Homepage
+        run: curl -f http://127.0.0.1:8080/index.php
