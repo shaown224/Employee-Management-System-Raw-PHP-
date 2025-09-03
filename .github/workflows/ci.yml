@@ -45,3 +45,15 @@ jobs:
 
       - name: Test Homepage
         run: curl -f http://127.0.0.1:8080/index.php
+
+  deploy:
+    runs-on: self-hosted
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to local server
+        run: |
+          cd /home/shaown/projects/myapp
+          git pull origin main
+          sudo systemctl restart php8.3-fpm
+          sudo systemctl restart nginx
