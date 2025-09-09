@@ -9,7 +9,7 @@
   <body>
     <div class="logo">
   </div>
-    <div class="title1"><h2>Employee Management System</h2></div>
+    <div class="title1"><h2>Employee Management</h2></div>
     <div class="link1"><a href="owner_login.php?ownerlogin=" style="color:#3ff8dd">Login as a Owner</a></div>
     <div class="link1"><a href="employee_login.php" style="color:#3ff8dd">Login as a Employee</a><br></div>
   </body>
