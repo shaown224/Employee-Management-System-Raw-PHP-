@@ -49,10 +49,10 @@ jobs:
       - name: Package app
         run: |
           mkdir build
-          cp -r * build/
+          rsync -av --progress ./ ./build --exclude build
           cd build
           zip -r ../myapp.zip .
-
+          
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
