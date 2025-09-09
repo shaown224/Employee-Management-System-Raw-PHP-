@@ -1,7 +1,7 @@
 <?php
   $dbServername ="localhost";
-  $dbUsername ="root";
-  $dbPassword ="";
+  $dbUsername ="myappuser";
+  $dbPassword ="StrongPassword123";
   $dbName="employee_management";
   $conn = mysqli_connect($dbServername,$dbUsername,$dbPassword,$dbName);
   if(!$conn){
