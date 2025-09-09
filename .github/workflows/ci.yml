@@ -63,14 +63,19 @@ jobs:
     runs-on: self-hosted
     needs: test
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: myapp
-          path: .
-
+          path: /tmp/deploy
+  
+      - name: Install unzip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+  
       - name: Deploy to local server
         run: |
-          unzip -o myapp.zip -d /home/shaown/projects/myapp
+          unzip -o /tmp/deploy/myapp.zip -d /home/shaown/projects/myapp
           sudo systemctl restart php8.3-fpm
           sudo systemctl restart nginx
+
