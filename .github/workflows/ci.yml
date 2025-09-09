@@ -1,4 +1,4 @@
-name: PHP CI
+name: PHP CI/CD with Artifacts
 
 on:
   push:
@@ -46,14 +46,30 @@ jobs:
       - name: Test Homepage
         run: curl -f http://127.0.0.1:8080/index.php
 
+      - name: Package app
+        run: |
+          mkdir build
+          cp -r * build/
+          cd build
+          zip -r ../myapp.zip .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: myapp
+          path: myapp.zip
+
   deploy:
     runs-on: self-hosted
     needs: test
     steps:
-      - uses: actions/checkout@v3
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: myapp
+
       - name: Deploy to local server
         run: |
-          cd /home/shaown/projects/myapp
-          git pull origin main
+          unzip -o myapp.zip -d /home/shaown/projects/myapp
           sudo systemctl restart php8.3-fpm
           sudo systemctl restart nginx
